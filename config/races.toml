@@ -1,0 +1,9 @@
+[[races]]
+id = "human"
+name = "Human"
+description = "human race description"
+
+[[races]]
+id = "dwarf"
+name = "Dwarf"
+description = "dwarf race description"

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/aspirin2ds/dungeon/controllers"
 	_ "github.com/aspirin2ds/dungeon/docs"
+	"github.com/aspirin2ds/dungeon/router"
 
 	"github.com/gin-gonic/gin"
 
@@ -14,23 +14,18 @@ import (
 
 //	@title			Dungeon API
 //	@version		1.0
-//	@description	This is a ai-driven dungeon server.
-
-//	@contact.name	API Support
-//	@contact.url	http://www.swagger.io/support
-//	@contact.email	aspirin2ds@outlook.com
-
-//	@license.name	GNU 3.0
-//	@license.url	https://www.gnu.org/licenses/gpl-3.0.en.html
+//	@description	This is an ai-driven dungeon server.
 
 // @host		localhost:8080
 // @BasePath	/api/v1
 func main() {
+
 	r := gin.Default()
+
 	v1 := r.Group("/api/v1")
+	router.InitApi(v1)
 
-	v1.GET("/ping", controllers.Ping)
-
+	// swagger embed files
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.Run(":8080")
 }

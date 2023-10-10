@@ -1,6 +1,8 @@
 package model
 
 import (
+	"fmt"
+
 	"github.com/BurntSushi/toml"
 )
 
@@ -8,6 +10,8 @@ type Race struct {
 	Id          string
 	Name        string
 	Description string
+
+	Progressions Progressions
 }
 
 var races []*Race
@@ -34,4 +38,5 @@ func loadRacesConfig() {
 	}
 
 	races = conf.Races
+	fmt.Println(races[0].Progressions[0])
 }

@@ -42,3 +42,21 @@ func GetCharacter(c *gin.Context, cid primitive.ObjectID) (*Character, error) {
 	}
 	return &cha, nil
 }
+
+func InsertCharacter(c *gin.Context, uid primitive.ObjectID, cha *Character) (primitive.ObjectID, error) {
+	cha.Owner = uid
+	cha.Created = time.Now()
+	res, err := Collection("characters").InsertOne(c.Request.Context(), cha)
+	if err != nil {
+		c.AbortWithError(500, err).SetType(gin.ErrorTypePrivate)
+		return primitive.NilObjectID, err
+	}
+
+	_, err = Collection("users").UpdateByID(c.Request.Context(), uid, bson.M{"$push": bson.M{"characters": res.InsertedID}})
+	if err != nil {
+		c.AbortWithError(500, err).SetType(gin.ErrorTypePrivate)
+		return primitive.NilObjectID, err
+	}
+
+	return res.InsertedID.(primitive.ObjectID), nil
+}

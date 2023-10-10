@@ -1,9 +1,10 @@
 [[classes]]
 id = "fighter"
 name = "Fighter"
-Description = "A master of martial combat, skilled with a variety of weapons and armor"
+description = "A master of martial combat, skilled with a variety of weapons and armor"
+
 
 [[classes]]
 id = "bard"
 name = "Bard"
-Description = "An inspiring magician whose power echoes the music of creation"
+description = "An inspiring magician whose power echoes the music of creation"

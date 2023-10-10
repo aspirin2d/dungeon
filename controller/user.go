@@ -3,7 +3,6 @@ package controller
 import (
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/aspirin2ds/dungeon/model"
 	"github.com/dlclark/regexp2"
@@ -60,18 +59,16 @@ type InsertedResponse struct {
 
 // @Summary		create a new user
 // @Tags			user
-// @Accept		multipart/form-data
-// @Param		username	formData	string	true	"unique username"
+// @Accept		json
+// @Param		  user_form	body controller.NewUser.UserForm	true "user form body"
 // @Produce		json
 // @Success		200 {object} controller.InsertedResponse "inserted user id"
 // @Failure		400 {object} controller.ErrorMessage "bad request"
 // @Failure		500 {object} controller.ErrorMessage "internal error"
 // @Router			/new [post]
 func NewUser(c *gin.Context) {
-	var ctx = c.Request.Context()
-
 	type UserForm struct {
-		Username string `form:"username" binding:"required"`
+		Username string `json:"username" binding:"required" example:"your_unique_name"`
 	}
 	var form UserForm
 	if err := c.Bind(&form); err != nil {
@@ -84,16 +81,10 @@ func NewUser(c *gin.Context) {
 		return
 	}
 
-	res, err := model.Collection("users").InsertOne(ctx, model.User{Username: form.Username, Created: time.Now()})
+	inserted, err := model.NewUser(c, &model.User{Username: form.Username})
 	if err != nil {
-		// if username already exists
-		if mongo.IsDuplicateKeyError(err) {
-			c.AbortWithError(400, fmt.Errorf("username already exists: %s", form.Username)).SetType(gin.ErrorTypePublic)
-		} else {
-			c.AbortWithError(500, err).SetType(gin.ErrorTypePrivate)
-		}
 		return
 	}
 
-	c.JSON(200, InsertedResponse{InsertedId: res.InsertedID.(primitive.ObjectID)})
+	c.JSON(200, InsertedResponse{InsertedId: inserted})
 }

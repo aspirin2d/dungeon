@@ -2,8 +2,15 @@
 id = "human"
 name = "Human"
 description = "human race description"
+progressions = [
+{level=1,tags=["pro:weapon:pikes", "pro:weapon:long_swords"]}
+]
 
 [[races]]
 id = "dwarf"
 name = "Dwarf"
 description = "dwarf race description"
+choices = ["dwarf_subraces"]
+progressions = [
+{level=1,tags=["darkvision", "pro:weapon:handaxes"], choices=["dwarf_subraces"]}
+]
